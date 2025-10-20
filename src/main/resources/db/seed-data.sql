@@ -1,5 +1,5 @@
 -- ==========================================================
--- Fraud Rule Engine - Enriched Demo Seed Script
+-- Fraud Rule Engine - Demo Seed Script
 -- ==========================================================
 
 -- 1. Optional reference tables
@@ -60,7 +60,7 @@ BEGIN
         ('aaaaaaaa-bbbb-cccc-dddd-aaaaaaaaaaaa','eBay Imports',55,FALSE,FALSE,'5311'),
         ('bbbbbbbb-cccc-dddd-eeee-bbbbbbbbbbbb','SuperCar Hire',40,FALSE,FALSE,'5521'),
         ('cccccccc-dddd-eeee-ffff-cccccccccccc','BetNation',15,TRUE,FALSE,'7995'),
-        ('dddddddd-eeee-ffff-gggg-dddddddddddd','Takealot',92,FALSE,TRUE,'5732');
+        ('dddddddd-eeee-ffff-aaaa-dddddddddddd','Takealot',92,FALSE,TRUE,'5732');
         RAISE NOTICE 'Inserted demo merchants.';
     ELSE
         RAISE NOTICE 'Merchants already exist, skipping.';
@@ -116,7 +116,7 @@ DECLARE
         'aaaaaaaa-bbbb-cccc-dddd-aaaaaaaaaaaa'::uuid,
         'bbbbbbbb-cccc-dddd-eeee-bbbbbbbbbbbb'::uuid,
         'cccccccc-dddd-eeee-ffff-cccccccccccc'::uuid,
-        'dddddddd-eeee-ffff-gggg-dddddddddddd'::uuid
+        'dddddddd-eeee-ffff-aaaa-dddddddddddd'::uuid
     ];
     devices  UUID[] := ARRAY[
         '11111111-dead-beef-cafe-000000000001'::uuid,

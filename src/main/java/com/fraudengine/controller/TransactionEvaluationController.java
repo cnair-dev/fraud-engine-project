@@ -134,17 +134,113 @@ public class TransactionEvaluationController {
 
     @GetMapping("/flags")
     @Operation(
-            summary = "List flagged transactions for a customer (paginated + filters)",
-            description = "Retrieve persisted flagged transactions filtered by customer, decision, score threshold, date range, and reason code.",
+            summary = "Retrieve flagged transactions",
+            description = """
+            Returns a paginated list of flagged transactions for a given customer.
+            Supports filtering by decision, score, date range, and reason code.
+            Useful for audit trails and analyst dashboards.
+            """,
             parameters = {
-                    @Parameter(name = "customerId", required = true, description = "Customer UUID"),
-                    @Parameter(name = "decision", description = "APPROVE, REVIEW, DECLINE"),
-                    @Parameter(name = "minScore", description = "Minimum composite score"),
-                    @Parameter(name = "from", description = "Start (ISO-8601)"),
-                    @Parameter(name = "to", description = "End (ISO-8601)"),
-                    @Parameter(name = "reason", description = "Reason code filter, e.g. AMOUNT_SPIKE"),
-                    @Parameter(name = "page", description = "Page number"),
-                    @Parameter(name = "size", description = "Page size")
+                    @Parameter(
+                            name = "customerId",
+                            required = true,
+                            description = "UUID of the customer whose flagged transactions should be retrieved",
+                            example = "11111111-2222-3333-4444-555555555555"
+                    ),
+                    @Parameter(
+                            name = "decision",
+                            description = "Filter by decision outcome (APPROVE, REVIEW, DECLINE)",
+                            example = "REVIEW"
+                    ),
+                    @Parameter(
+                            name = "minScore",
+                            description = "Only include transactions with a score greater than or equal to this value",
+                            example = "60"
+                    ),
+                    @Parameter(
+                            name = "from",
+                            description = "Start of time range (ISO-8601)",
+                            example = "2025-10-15T00:00:00Z"
+                    ),
+                    @Parameter(
+                            name = "to",
+                            description = "End of time range (ISO-8601)",
+                            example = "2025-10-20T23:59:59Z"
+                    ),
+                    @Parameter(
+                            name = "reason",
+                            description = "Reason code to filter by (e.g. AMOUNT_SPIKE)",
+                            example = "AMOUNT_SPIKE"
+                    ),
+                    @Parameter(
+                            name = "page",
+                            description = "Page number (0-indexed, default = 0)",
+                            example = "0"
+                    ),
+                    @Parameter(
+                            name = "size",
+                            description = "Page size (default = 10)",
+                            example = "10"
+                    )
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Paginated list of flagged transactions retrieved successfully",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(example = """
+                                        {
+                                          "content": [
+                                            {
+                                              "id": "f1e2d3c4-b5a6-7890-abcd-ef1234567890",
+                                              "txnId": "b1a2d3c4-e5f6-7890-abcd-ef1234567890",
+                                              "customerId": "11111111-2222-3333-4444-555555555555",
+                                              "score": 82.5,
+                                              "decision": "DECLINE",
+                                              "reasonCodes": ["AMOUNT_SPIKE", "MCC_RISK"],
+                                              "details": {
+                                                "AMOUNT_SPIKE": {"ratio": 1.35},
+                                                "MCC_RISK": {"mcc": "7995"}
+                                              },
+                                              "createdAt": "2025-10-19T15:23:00Z"
+                                            }
+                                          ],
+                                          "pageable": { "pageNumber": 0, "pageSize": 10 },
+                                          "totalElements": 2,
+                                          "totalPages": 1,
+                                          "last": true,
+                                          "first": true
+                                        }
+                                        """)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid query parameters or malformed UUID",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(example = """
+                                        {
+                                          "error": "Invalid customerId format",
+                                          "timestamp": "2025-10-20T08:22:10Z"
+                                        }
+                                        """)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "No flagged transactions found for the given filters",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(example = """
+                                        {
+                                          "error": "No flagged transactions found",
+                                          "timestamp": "2025-10-20T08:25:00Z"
+                                        }
+                                        """)
+                            )
+                    )
             }
     )
     public ResponseEntity<Page<FlaggedTransaction>> getFlags(
