@@ -68,6 +68,7 @@ public class TransactionEvaluationService {
                         .decision(decision)
                         .reasonCodes(mapper.valueToTree(result.getReasons()))
                         .details(mapper.valueToTree(result.getDetails()))
+                        .txnSnapshot(mapper.valueToTree(req))
                         .build();
                 flaggedRepository.save(flag);
                 log.info("Flagged transaction persisted with score={} decision={}", result.getCompositeScore(), decision);

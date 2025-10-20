@@ -196,13 +196,30 @@ DO
 $$
 BEGIN
     IF (SELECT COUNT(*) FROM flagged_transactions) = 0 THEN
-        INSERT INTO flagged_transactions (id, txn_id, customer_id, score, decision, reason_codes, details, created_at)
-        SELECT gen_random_uuid(), id, customer_id,
-               65 + (random()*35)::int,
-               CASE WHEN random()>0.75 THEN 'DECLINE' ELSE 'REVIEW' END,
-               '["AMOUNT_SPIKE","MCC_RISK","GEO_VELOCITY"]',
-               '{"AMOUNT_SPIKE":{"ratio":1.35},"MCC_RISK":{"mcc":"7995"},"GEO_VELOCITY":{"km":1500}}'::jsonb,
-               NOW() - (random()*5 || ' days')::interval
+        INSERT INTO flagged_transactions (
+            id, txn_id, customer_id, score, decision, reason_codes, details, txn_snapshot, created_at
+        )
+        SELECT
+            gen_random_uuid(),
+            id,
+            customer_id,
+            65 + (random()*35)::int,
+            CASE WHEN random()>0.75 THEN 'DECLINE' ELSE 'REVIEW' END,
+            '["AMOUNT_SPIKE","MCC_RISK","GEO_VELOCITY"]',
+            '{"AMOUNT_SPIKE":{"ratio":1.35},"MCC_RISK":{"mcc":"7995"},"GEO_VELOCITY":{"km":1500}}'::jsonb,
+            jsonb_build_object(
+                'txnId', id,
+                'customerId', customer_id,
+                'amount', amount,
+                'currency', currency,
+                'merchantId', merchant_id,
+                'mcc', mcc,
+                'deviceId', device_id,
+                'channel', channel,
+                'description', description,
+                'timestamp', timestamp
+            ),
+            NOW() - (random()*5 || ' days')::interval
         FROM transactions
         ORDER BY random()
         LIMIT 40;

@@ -47,6 +47,10 @@ public class FlaggedTransaction {
     @Builder.Default
     private OffsetDateTime createdAt = OffsetDateTime.now(ZoneOffset.UTC);
 
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private JsonNode txnSnapshot;
+
     @PrePersist
     public void prePersist() {
         if (createdAt == null) createdAt = OffsetDateTime.now();
