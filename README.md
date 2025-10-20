@@ -110,7 +110,8 @@ curl -u admin:adminpass -H "Content-Type: application/json" -d '{
 ### 4. Retrieve Flagged Transactions
 ```bash
 curl -u admin:adminpass \
-"http://localhost:8080/api/v1/transactions/flags?customerId=11111111-2222-3333-4444-555555555555"
+"http://localhost:8080/api/v1/transactions/flags?customerId=11111111-2222-3333-4444-555555555555&page=0&size=2&includeSnapshot=true"
+
 ```
 Optional filters:
 ```makefile
@@ -119,6 +120,7 @@ Optional filters:
 &from=2025-10-19T00:00:00Z
 &to=2025-10-20T00:00:00Z
 &reason=AMOUNT_SPIKE
+&includeSnapshot=true
 ```
 ### 5. Batch Evaluation
 ```bash
