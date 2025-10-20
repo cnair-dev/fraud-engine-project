@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "rules": [
+    { "id": "AMOUNT_THRESHOLD", "enabled": true, "params": {
+      "baseThresholds": {"standard":10000,"premium":20000,"business":50000}, "currency":"ZAR"}, "weight": 30 },
+    { "id": "VELOCITY_WINDOW", "enabled": true, "params": {"windowMinutes":10,"maxCount":5}, "weight": 35 },
+    { "id": "CUMULATIVE_DAILY", "enabled": true, "params": {"dailyLimit":30000}, "weight": 25 },
+    { "id": "NEW_COUNTRY", "enabled": true, "params": {"lookbackDays":180}, "weight": 25 },
+    { "id": "TIME_OF_DAY", "enabled": true, "params": {"startHour":22,"endHour":6}, "weight": 15 }
+  ],
+  "decision": {"flagThreshold": 40, "aggregate": "MAX"}
+}
+

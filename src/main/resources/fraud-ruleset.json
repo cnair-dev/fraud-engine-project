@@ -1,0 +1,59 @@
+{
+  "version": "1.0.3",
+  "effectiveFrom": "2025-10-20T00:00:00Z",
+  "scoring": {
+    "composite": "weighted_sum(rule_score[name] * weight * sensitivity)",
+    "flag_logic": "flag_if(score >= threshold)"
+  },
+  "threshold": 70,
+  "rules": [
+    {
+      "name": "AMOUNT_SPIKE",
+      "weight": 0.40,
+      "sensitivity": 1.30,
+      "reasonCode": "AMOUNT_SPIKE"
+    },
+    {
+      "name": "TXN_VELOCITY",
+      "weight": 0.18,
+      "sensitivity": 1.25,
+      "reasonCode": "TXN_VELOCITY"
+    },
+    {
+      "name": "MCC_RISK",
+      "weight": 0.16,
+      "sensitivity": 1.05,
+      "reasonCode": "MCC_RISK"
+    },
+    {
+      "name": "GEO_VELOCITY",
+      "weight": 0.16,
+      "sensitivity": 1.10,
+      "reasonCode": "GEO_VELOCITY"
+    },
+    {
+      "name": "NEW_DEVICE",
+      "weight": 0.14,
+      "sensitivity": 1.30,
+      "reasonCode": "NEW_DEVICE"
+    },
+    {
+      "name": "MERCHANT_REPUTATION",
+      "weight": 0.09,
+      "sensitivity": 1.00,
+      "reasonCode": "MERCHANT_REPUTATION"
+    },
+    {
+      "name": "ACCOUNT_RISK_HISTORY",
+      "weight": 0.04,
+      "sensitivity": 1.15,
+      "reasonCode": "ACCOUNT_RISK_HISTORY"
+    },
+    {
+      "name": "TIME_OF_DAY",
+      "weight": 0.05,
+      "sensitivity": 1.1,
+      "reasonCode": "TIME_OF_DAY"
+    }
+  ]
+}
